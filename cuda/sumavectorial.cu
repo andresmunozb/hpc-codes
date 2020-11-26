@@ -1,9 +1,10 @@
 #include <stdio.h>
 
-__global__ void suma(double* a, double* b, double* c)
+__global__ void suma(double* a, double* b, double* c, int n)
 {
     int tid = blockDim.x * blockIdx.x + threadIdx.x;
-    c[tid] = a[tid] + b[tid];
+    if (tid < n)
+        c[tid] = a[tid] + b[tid];
 }
 
 __host__ int main(int argc,char* argv[])
@@ -37,7 +38,7 @@ __host__ int main(int argc,char* argv[])
     gridSize = (int)ceil((float)n/blockSize); //blocks
     printf("%i\n", gridSize);
     
-    suma<<<gridSize, blockSize>>>(d_a, d_b, d_c);
+    suma<<<gridSize, blockSize>>>(d_a, d_b, d_c,n);
     cudaMemcpy( h_c, d_c, n*sizeof(double), cudaMemcpyDeviceToHost );
 
     for(int i=0;i<n;i++)
