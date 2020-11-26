@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define N 1024*1024
+#define N 1024
 #define T 32
 #define V 5
 
@@ -11,6 +11,7 @@ __global__ void sumavecinos(float *a, int n, float *b, int v)
 	int sum=0;
 	for(int i=tid-v;i<=tid+v;i++)
 	{
+		printf("%d\n",i);
 		if(i>=0 && i < N)
 			sum= sum + a[i];
 	}
@@ -40,8 +41,8 @@ int main() {
 	//RESULADO DESDE DEVICE A HOST
 	cudaMemcpy(h_b, d_b, sizeof(float), cudaMemcpyDeviceToHost);
 
-	for (int i=0; i < N; i++)
-		printf("%f\n", h_b[i]);
+	/*for (int i=0; i < N; i++)
+		printf("%f\n", h_b[i]);*/
 
 	cudaFree(d_a);
     cudaFree(d_b);
